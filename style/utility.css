@@ -1,0 +1,6 @@
+.caret{
+    width: 14px;
+    display: block;
+    aspect-ratio: 1;
+    background-image: url(../assets/icon/caret-down.svg);
+}

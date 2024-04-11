@@ -1,0 +1,117 @@
+:root {
+    --cell-width : 22px;
+    --clr-navy: #34495e;
+    --primary-clr: #6563ff;
+    --secondary-clr: #c4c3fc;
+    --light-line: #e4e2ed;
+    --light-text: #686673;
+    --light-dot: #adaac0;
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: sans-serif;
+    text-decoration: none;
+    list-style: none;
+}
+body{
+    width: 100vw;
+    height: 100vh;
+}
+.template{
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    grid-gap: 10px;
+}
+nav{
+    display: flex;
+    padding: 5px;
+    white-space: nowrap;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--clr-navy);
+}
+.logo{
+    color: white;
+    padding: 0 18px;
+    font-size: 20px;
+    font-weight: 600;
+}
+.btn{
+    cursor: pointer;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 5px;
+    background-color: var(--primary-clr);
+}
+.nav-menu{
+    display: flex;
+    align-items: center;
+}
+.nav-menu>li>a{
+    gap: 10px;
+    display: flex;
+    color: white;
+    padding: 8px 16px;
+    font-weight: 600;
+    align-items: center;
+}
+.nav-menu>li.active>a{
+    background-color: var(--primary-clr);
+}
+.nav-menu>li>a:hover{
+    color: var(--secondary-clr);
+}
+.drop-box{
+    position: relative;
+}
+.drop-box.active .drop-menu{
+    display: block;
+}
+.drop-box .drop-menu{
+    display: none;
+    right: 0;
+    top : calc(100% + 20px);
+    padding: 4px;
+    position: absolute;
+    min-width: 120px;
+    border-radius: 10px;
+    background-color: var(--clr-navy);
+}
+.drop-menu>li>a{
+    color: white;
+    padding: 8px;
+    display: block;
+    border-radius: 4px;
+}
+.drop-menu>li>a:hover,
+.drop-box>li.active>a{
+    background-color: var(--primary-clr);
+}
+.row{
+    display: flex;
+}
+.col{
+    aspect-ratio: 1;
+    width: 100%;
+    border: 1px solid var(--light-line);
+}
+
+@media screen and (max-width: 1000px) {
+    nav{
+        display: grid;
+        grid-row-gap: 4px;
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+    .btn{
+        justify-self: start;
+    }
+    .nav-menu{
+        width: max-content;
+        grid-column: 1/-1;
+    }
+}

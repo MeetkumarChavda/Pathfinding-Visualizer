@@ -63,6 +63,9 @@ nav{
 .nav-menu>li.active>a{
     background-color: var(--primary-clr);
 }
+.nav-menu>li.active>a:hover{
+    color: white;
+}
 .nav-menu>li>a:hover{
     color: var(--secondary-clr);
 }
@@ -89,7 +92,7 @@ nav{
     border-radius: 4px;
 }
 .drop-menu>li>a:hover,
-.drop-box>li.active>a{
+.drop-menu>li.active>a{
     background-color: var(--primary-clr);
 }
 .row{

@@ -351,7 +351,8 @@ visualizeBtn.addEventListener('click', ()=>{
     pathToAnimate = [];
     // BFS();
     // Dijsktra();
-    greedy();
+    // greedy();;
+    Astar();
     animate(visitedCell , 'visited');
 });
 function BFS(){
@@ -532,6 +533,7 @@ function Dijsktra(){
                 && !matrix[neighbour.x][neighbour.y].classList.contains('wall')
                 // && !visited.has(key)
             ){
+                // relaxing
                 //Assuming edge weight = 1 , between adjecent vertices
                 const edgeWeight = 1;
                 const distanceToNeighbour = distanceSoFar + edgeWeight;
@@ -594,3 +596,77 @@ function greedy(){
     }
 
 }
+
+// A* Algorithm copy of  dijksta and greedy 
+// AStar = Greedy + Dijkstra 
+//    heuristicValue   distance
+//  Priorties basedw on both distance + heuristicValue
+
+function Astar(){
+    const queue =  new PriorityQueue();
+    const visited = new Set();//Closed set
+    const queued = new Set();//open set
+    const parent = new Map();
+    const distance = [];
+
+    for (let i = 0 ; i < row ; i++){
+        const INF = [];
+        for(let j = 0 ; j<col ; j++){
+            INF.push(Infinity);
+        }
+        distance.push(INF);
+    }
+    distance[source_Cordinate.x][source_Cordinate.y] = 0 ;
+    queue.push({cordinate: source_Cordinate, cost:heuristicValue(source_Cordinate)});
+    queued.add(`${source_Cordinate.x}-${source_Cordinate.y}`);
+
+
+    while(queue.length > 0){
+        const {cordinate: current} = queue.pop();
+        visitedCell.push(matrix[current.x][current.y]);
+
+        //you find the target
+        if(current.x === target_Cordinate.x && current.y === target_Cordinate.y){
+            getPath(parent , target_Cordinate);
+            return;
+        }  
+        // close set add
+        visited.add(`${current.x}-${current.y}`);//Finalize
+
+        // row x col y  formation here not like x and y cordinate in maths 
+        const neighbours = [
+            {x:current.x-1 , y:current.y },//up
+            {x:current.x, y:current.y + 1 },//right
+            {x:current.x + 1 , y:current.y },//down
+            {x:current.x, y:current.y - 1 },//left
+        ];
+
+        for(const neighbour of neighbours){
+            const key = `${neighbour.x}-${neighbour.y}`;
+            if(
+                isValid(neighbour.x , neighbour.y) 
+                && !matrix[neighbour.x][neighbour.y].classList.contains('wall')
+                && !visited.has(key)
+                && !queued.has(key)
+            ){
+
+               // relaxing
+                //Assuming edge weight = 1 , between adjecent vertices
+                const edgeWeight = 1;
+                distanceSoFar = distance[current.x][current.y];
+                const distanceToNeighbour = distanceSoFar + edgeWeight;
+                
+                if(distanceToNeighbour < distance[neighbour.x][neighbour.y]){
+                    distance[neighbour.x][neighbour.y] = distanceToNeighbour;
+                    queue.push({cordinate : neighbour , cost :distanceToNeighbour + heuristicValue(neighbour)});
+                    queued.add(key)
+                    // visited.add(key);
+                    parent.set(key , current);
+                }
+               
+            }
+        }
+    }
+
+}
+

@@ -349,8 +349,9 @@ var pathToAnimate ;
 visualizeBtn.addEventListener('click', ()=>{
     visitedCell = [];
     pathToAnimate = [];
-    BFS();
+    // BFS();
     // Dijsktra();
+    greedy();
     animate(visitedCell , 'visited');
 });
 function BFS(){
@@ -542,6 +543,52 @@ function Dijsktra(){
                     parent.set(key , current);
                 }
                
+            }
+        }
+    }
+
+}
+
+//=====Greedy algorithm========
+function heuristicValue(node){
+    return Math.abs(node.x - target_Cordinate.x) + Math.abs(node.y - target_Cordinate.y);
+}
+function greedy(){
+    const queue =  new PriorityQueue();
+    const visited = new Set();
+    const parent = new Map();
+
+    queue.push({cordinate: source_Cordinate, cost:heuristicValue(source_Cordinate)});
+    visited.add(`${source_Cordinate.x}-${source_Cordinate.y}`);
+
+
+    while(queue.length > 0){
+        const {cordinate: current} = queue.pop();
+        visitedCell.push(matrix[current.x][current.y]);
+
+        //you find the target
+        if(current.x === target_Cordinate.x && current.y === target_Cordinate.y){
+            getPath(parent , target_Cordinate);
+            return;
+        }  
+        // row x col y  formation here not like x and y cordinate in maths 
+        const neighbours = [
+            {x:current.x-1 , y:current.y },//up
+            {x:current.x, y:current.y + 1 },//right
+            {x:current.x + 1 , y:current.y },//down
+            {x:current.x, y:current.y - 1 },//left
+        ];
+
+        for(const neighbour of neighbours){
+            const key = `${neighbour.x}-${neighbour.y}`;
+            if(
+                isValid(neighbour.x , neighbour.y) 
+                && !matrix[neighbour.x][neighbour.y].classList.contains('wall')
+                && !visited.has(key)
+            ){
+                queue.push({cordinate:neighbour , cost : heuristicValue(neighbour)});
+                visited.add(key);
+                parent.set(key , current);
             }
         }
     }

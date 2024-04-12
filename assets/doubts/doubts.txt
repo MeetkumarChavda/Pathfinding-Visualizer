@@ -141,3 +141,37 @@ In simpler use cases,
   Complex logic should only be introduced when it's necessary for the requirements of the application.
 
 _________________________________________________________________________________________________
+////maze algo 
+
+This function generates a maze using a recursive backtracking algorithm. Let's break down how it works:
+
+1. **Parameters**: 
+   - `rowStart`, `rowEnd`, `colStart`, `colEnd`: Define the boundaries of the maze.
+   - `surroundingWall`: Indicates whether the surrounding walls of the maze have been drawn.
+   - `orientation`: Specifies whether the division of the maze cells should be horizontal or vertical.
+
+2. **Base Case**: If the starting row is greater than the ending row or the starting column is greater than the ending column,
+ the function returns, indicating that there's no need to generate a maze within these boundaries.
+
+3. **Drawing Surrounding Walls**: If the `surroundingWall` parameter is false,
+ it draws the top, bottom, left, and right boundary walls of the maze, ensuring that the maze is enclosed.
+
+4. **Maze Division**: The maze is divided recursively either horizontally or vertically based on the `orientation` parameter. 
+   - If the orientation is horizontal:
+     - It selects a random row from the available rows within the specified boundaries.
+     - Then, it selects a random column to carve a passage, creating a division in that row.
+     - It recursively calls the `generateMaze` function to divide the upper and lower subregions of the maze.
+   - If the orientation is vertical:
+     - It selects a random column from the available columns within the specified boundaries.
+     - Then, it selects a random row to carve a passage, creating a division in that column.
+     - It recursively calls the `generateMaze` function to divide the left and right subregions of the maze.
+
+5. **Recursive Calls**: The function calls itself recursively to divide the maze further until it reaches a base
+ case where the boundaries are too small to divide.
+
+6. **Wall Carving**: Walls are carved by adding the CSS class `'wall'` to the corresponding cells in the grid,
+ effectively creating the maze structure.
+
+Overall, this function systematically divides the maze space into smaller sections,
+ creating a maze with random passages while ensuring that all areas are connected and there are no isolated sections.
+

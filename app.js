@@ -1,6 +1,8 @@
 var cells;
 let row, col;
-var matrix = [];
+var matrix;
+let source_Cordinate;
+let target_Cordinate;
 const board  = document.querySelector("#board");
 
 renderBoard();
@@ -8,6 +10,7 @@ renderBoard();
 function renderBoard(cellWidth = 22){
 
     cells = [];
+    matrix = [];
     row = Math.floor(board.clientHeight / cellWidth) ;
     col = Math.floor(board.clientWidth / cellWidth) ;
     
@@ -39,6 +42,8 @@ function renderBoard(cellWidth = 22){
         matrix.push(rowArr);
         board.appendChild(rowElement);
     }
+    source_Cordinate = set('source');
+    target_Cordinate = set('target');
 }
 // console.log(matrix);
 var dropOptions = null ;
@@ -134,8 +139,7 @@ function isValid(x , y){
 }
 
 
-let source_Cordinate = set('source');
-let target_Cordinate = set('target');
+
 /**
  * Sets a class to an element in a matrix at provided coordinates,
  * or at random coordinates if provided ones are invalid.
@@ -213,6 +217,7 @@ cells.forEach((cell) => {
 
 const clearPath = ()=> {
     cells.forEach(cell=>{
+        cell.classList.remove('visited');
         cell.classList.remove('path');
     })
 }
@@ -223,35 +228,65 @@ const clearWall = ()=> {
     })
 }
 
+function clearBoard(){
+    cells.forEach(cell =>{
+        cell.classList.remove('visited');
+        cell.classList.remove('wall');
+        cell.classList.remove('path');
+    })
+}
+///=====================================================================//
 // Maze generation
 
-// generateMaze(0, row-1 , 0, col-1, false, 'horizontal');
+
+const clearBoardBtn = document.getElementById('clearBoard');
+const clearPathBrn = document.getElementById('clearPath');
+
+clearPathBrn.addEventListener('click',clearPath);
+clearBoardBtn.addEventListener('click' , clearBoard);
+var wallToAnimate;
+const generateMazeBtn = document.getElementById('generateMazeBtn');
+generateMazeBtn.addEventListener('click', ()=>{
+    wallToAnimate = [];
+    generateMaze(0, row-1 , 0, col-1, false, 'horizontal');
+  
+    animate(wallToAnimate, 'wall');
+   
+});
+// 
 function generateMaze(rowStart , rowEnd , colStart , colEnd , surroundingWall , orientation){
     if(rowStart > rowEnd || colStart > colEnd){
         return;
     }
     
     if(!surroundingWall){
+        //Drawing top & bottom Boundary Walls
         for (let i = 0; i < col; i++) {
            if(!matrix[0][i].classList.contains('source') && !matrix[0][i].classList.contains('target'))
-           matrix[0][i].classList.add('wall');
-          
+            wallToAnimate.push(matrix[0][i]);
+           //    matrix[0][i].classList.add('wall');
            if(!matrix[row-1][i].classList.contains('source') && !matrix[row-1][i].classList.contains('target'))
-           matrix[row-1][i].classList.add('wall')
+            wallToAnimate.push(matrix[row-1][i]);
+         //    matrix[row-1][i].classList.add('wall')
         }
+        //Drawing left & right Boundar wall
         for(let i = 0 ; i<row ; i++){
             if(!matrix[i][0].classList.contains('source') && !matrix[i][0].classList.contains('target'))
-            matrix[i][0].classList.add('wall');
+            wallToAnimate.push(matrix[i][0]);
+            // matrix[i][0].classList.add('wall');
            
             if(!matrix[i][col-1].classList.contains('source') && !matrix[i][col-1].classList.contains('target'))
-            matrix[i][col-1].classList.add('wall')
+            wallToAnimate.push(matrix[i][col-1]);
+        
         }
         surroundingWall = true;
+       
     } 
     
     if(orientation === 'horizontal'){
         let possibleRows = [];
         for(let i = rowStart; i<=rowEnd ; i+=2){
+            // if (i == 0 || i == row - 1) continue;
             possibleRows.push(i);
         }
         let posibleCols = [];
@@ -267,7 +302,8 @@ function generateMaze(rowStart , rowEnd , colStart , colEnd , surroundingWall , 
             if(!cell || i === randomCol || cell.classList.contains('source')|| cell.classList.contains('target'))
             continue;
 
-            cell.classList.add('wall'); 
+            // cell.classList.add('wall'); 
+            wallToAnimate.push(cell);
         }
         //Upper subDivision
         generateMaze(rowStart, currentRow-2 , colStart, colEnd, false, ((currentRow - 2)-rowStart > colEnd - colStart)? 'horizontal': 'vertical');
@@ -293,15 +329,93 @@ function generateMaze(rowStart , rowEnd , colStart , colEnd , surroundingWall , 
             if(!cell || i === randomRow || cell.classList.contains('source')|| cell.classList.contains('target'))
             continue;
 
-            cell.classList.add('wall'); 
+            // cell.classList.add('wall'); 
+            wallToAnimate.push(cell);
 
         }
         
-        //Upper subDivision
+        //left subDivision
         generateMaze(rowStart, rowEnd , colStart, currentCol - 2, false, ( rowEnd - rowStart > (currentCol-2) - colStart)? 'horizontal': 'vertical');
-        //Bottom subDivision
+        //right subDivision
         generateMaze(rowStart, rowEnd , currentCol + 2, colEnd, false, (rowEnd - rowStart > colEnd - (currentCol+2))? 'horizontal': 'vertical');
   
     }
+     
+}
 
+// Path Finding algos
+var visitedCell ;
+var pathToAnimate ;
+visualizeBtn.addEventListener('click', ()=>{
+    visitedCell = [];
+    pathToAnimate = [];
+    BFS();
+    animate(visitedCell , 'visited');
+});
+function BFS(){
+    const queue = [];
+    const visited = new Set();
+    const parent = new Map();
+
+    queue.push(source_Cordinate);
+    visited.add(`${source_Cordinate.x}-${source_Cordinate.y}`);
+
+
+    while(queue.length > 0){
+        const current = queue.shift();
+        visitedCell.push(matrix[current.x][current.y]);
+
+        //you find the target
+        if(current.x === target_Cordinate.x && current.y === target_Cordinate.y){
+            getPath(parent , target_Cordinate);
+            return;
+        }  
+        // row x col y  formation here not like x and y cordinate in maths 
+        const neighbours = [
+            {x:current.x-1 , y:current.y },//up
+            {x:current.x, y:current.y + 1 },//right
+            {x:current.x + 1 , y:current.y },//down
+            {x:current.x, y:current.y - 1 },//left
+        ];
+
+        for(const neighbour of neighbours){
+            const key = `${neighbour.x}-${neighbour.y}`;
+            if(
+                isValid(neighbour.x , neighbour.y) 
+                && !matrix[neighbour.x][neighbour.y].classList.contains('wall')
+                && !visited.has(key)
+            ){
+                queue.push(neighbour);
+                visited.add(key);
+                parent.set(key , current);
+            }
+        }
+    }
+
+}
+
+function animate(elements , className){
+    let delay = 10 ;
+    if(className === 'path') delay *= 3.5;
+    if(className === 'wall') delay *= 0.005;
+    for(let i  = 0 ; i< elements.length ; i++){
+        setTimeout(()=>{
+            elements[i].classList.remove('visited');
+            elements[i].classList.add(className);
+            if(i === elements.length-1 && className === 'visited' ){
+                // console.log("Search finished")
+                animate(pathToAnimate , 'path')
+            }
+        },delay * i);
+    }
+}
+
+function getPath(parent , target){
+
+    if(!target)return;
+
+    pathToAnimate.push(matrix[target.x][target.y]);
+    const p = parent.get(`${target.x}-${target.y}`);
+
+    getPath(parent, p);
 }

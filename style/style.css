@@ -105,9 +105,8 @@ nav{
 .col{
     aspect-ratio: 1;
     width: 100%;
-    border: 1px solid var(--light-line);
+    border: 0.5px solid var(--light-line);
 }
-
 .guide-bar{
     gap: 16px;
     display: flex;

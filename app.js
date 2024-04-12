@@ -352,7 +352,10 @@ visualizeBtn.addEventListener('click', ()=>{
     // BFS();
     // Dijsktra();
     // greedy();;
-    Astar();
+    // Astar();
+    if(DFS(source_Cordinate))
+        pathToAnimate.push(matrix[source_Cordinate.x][source_Cordinate.y]);
+    // DFS(source_Cordinate);
     animate(visitedCell , 'visited');
 });
 function BFS(){
@@ -670,3 +673,29 @@ function Astar(){
 
 }
 
+// DFS 
+const visited = new Set();
+function DFS(current){
+    if(current.x === target_Cordinate.x && current.y === target_Cordinate.y){
+        return true;
+    }
+    visitedCell.push(matrix[current.x][current.y]);
+    visited.add(`${current.x}-${current.y}`);
+    const neighbours = [
+        {x:current.x-1 , y:current.y },//up
+        {x:current.x, y:current.y + 1 },//right
+        {x:current.x + 1 , y:current.y },//down
+        {x:current.x, y:current.y - 1 },//left
+    ];
+
+    for (const neighbour of neighbours) {
+        if(isValid(neighbour.x , neighbour.y) &&
+        !visited.has(`${neighbour.x}-${neighbour.y}`) &&
+        !matrix[neighbour.x][neighbour.y].classList.contains('wall')){
+           if( DFS(neighbour)){
+            pathToAnimate.push(matrix[neighbour.x][neighbour.y]);
+             return true;
+           }
+        }
+    }
+}

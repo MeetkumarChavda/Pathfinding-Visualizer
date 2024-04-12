@@ -80,6 +80,7 @@ nav{
     display: block;
 }
 .drop-box .drop-menu{
+    z-index: 100;
     display: none;
     right: 0;
     top : calc(100% + 20px);

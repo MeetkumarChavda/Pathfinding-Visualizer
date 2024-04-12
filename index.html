@@ -31,7 +31,7 @@
                             <li><a href="#">16px</a></li>
                             <li><a href="#">18px</a></li>
                             <li><a href="#">20px</a></li>
-                            <li><a href="#">22px</a></li>
+                            <li class="active"><a href="#">22px</a></li>
                             <li><a href="#">24px</a></li>
                             <li><a href="#">26px</a></li>
                         </ul>
@@ -41,7 +41,7 @@
                         <a href="#">speed<span class="caret"></span></a>
                         <ul class="drop-menu">
                             <li><a href="#">Slow</a></li>
-                            <li><a href="#">Normal</a></li>
+                            <li class="active"><a href="#">Normal</a></li>
                             <li><a href="#">Fast</a></li>
                         </ul>
                     </li>
@@ -49,7 +49,7 @@
                     <li class="drop-box">
                         <a href="#">algorithms<span class="caret"></span></a>
                         <ul class="drop-menu">
-                            <li><a href="#">BFS</a></li>
+                            <li class="active"><a href="#">BFS</a></li>
                             <li><a href="#">Dijkstra's Algorithm</a></li>
                             <li><a href="#">Greedy Best-first Search</a></li>
                             <li><a href="#">A* Algorithm</a></li>
@@ -59,7 +59,32 @@
                 </ul>
 
             </nav> 
-            <div class="guid-bar"></div>
+            <ul class="guide-bar">
+               <li>
+                    <span class="icon source"></span>
+                    <span class="text">Source</span>
+               </li>
+               <li>
+                    <span class="icon target"></span>
+                    <span class="text">Target</span>
+                </li>
+                <li>
+                    <span class="icon path"></span>
+                    <span class="text">path</span>
+                </li>
+                <li>
+                    <span class="icon visited"></span>
+                    <span class="text">Visited Node</span>
+                </li>
+                <li>
+                    <span class="icon unvisited"></span>
+                    <span class="text">Unvisited Node</span>
+                </li>
+                <li>
+                    <span class="icon wall"></span>
+                    <span class="text">Wall</span>
+                </li>
+            </ul>
         </header>
         <!-- ============ DYNAMIC BOARD ================ -->
         <div id="board"><!-- js--></div>

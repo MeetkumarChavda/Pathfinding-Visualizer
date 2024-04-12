@@ -6,6 +6,10 @@
     --light-line: #e4e2ed;
     --light-text: #686673;
     --light-dot: #adaac0;
+    --wall: #0c3547;
+    --path-clr: #fffe6a;
+    --visited-clr: #40cee3;
+
 }
 
 *{
@@ -102,6 +106,21 @@ nav{
     aspect-ratio: 1;
     width: 100%;
     border: 1px solid var(--light-line);
+}
+.guid-bar{
+    gap: 16px;
+    display: flex;
+    padding: 8px;
+    font-size: 20px;
+    text-transform: capitalize;
+}
+.guid-bar>li{
+    gap: 4px;
+    display: flex;
+    align-items: center;
+}
+#board{
+    overflow: hidden;
 }
 
 @media screen and (max-width: 1000px) {

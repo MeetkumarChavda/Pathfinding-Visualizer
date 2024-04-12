@@ -350,6 +350,7 @@ visualizeBtn.addEventListener('click', ()=>{
     visitedCell = [];
     pathToAnimate = [];
     BFS();
+    // Dijsktra();
     animate(visitedCell , 'visited');
 });
 function BFS(){
@@ -418,4 +419,131 @@ function getPath(parent , target){
     const p = parent.get(`${target.x}-${target.y}`);
 
     getPath(parent, p);
+}
+
+
+//=====Dijktras algorithm========
+class PriorityQueue{
+    constructor(){
+        this.elements = [];
+        this.length = 0 ;
+    }
+    push(data){
+        this.elements.push(data);
+        this.length++;
+        this.upHeapify(this.length-1);
+    }
+    pop(){
+        this.swap(0, this.length-1);
+        const popped = this.elements.pop();
+        this.length--;
+        this.downHeapify(0);
+        return popped;
+    }
+    upHeapify(i){
+        if( i === 0 ) return;
+        const parent = Math.floor((i-1)/2)
+        if(this.elements[i].cost < this.elements[parent].cost){
+            this.swap(parent , i);
+            this.upHeapify(parent);
+        }
+
+    }
+    downHeapify(i){
+        let minNode = i ;
+        const leftChild = (2*i) + 1 ;
+        const rightChild = (2*i) +2 ; 
+
+        if(leftChild < this.length && this.elements[leftChild].cost < this.elements[minNode].cost){
+            minNode = leftChild;
+        }
+
+        if(rightChild < this.length && this.elements[rightChild].cost < this.elements[minNode].cost){
+            minNode = rightChild;
+        }
+        if(minNode !== i){
+            this.swap(minNode , i);
+            this.downHeapify(minNode);
+        }
+
+    }
+    isEmpty(){
+        return this.length === 0 ;
+    }
+    swap(x , y){
+        [this.elements[x],this.elements[y]] = [this.elements[y],this.elements[x]];
+    }
+
+}
+
+// const pq = new PriorityQueue();
+// pq.push({cost:2});
+// pq.push({cost:0});
+// pq.push({cost:1});
+
+// console.log(pq.pop());
+// console.log(pq.pop());
+// console.log(pq.pop());
+
+function Dijsktra(){
+    console.log("im Dijsktra");
+
+    const pq = new PriorityQueue();
+    // const visited = new Set();
+    const parent = new Map();
+    const distance = [];
+
+    for (let i = 0 ; i < row ; i++){
+        const INF = [];
+        for(let j = 0 ; j<col ; j++){
+            INF.push(Infinity);
+        }
+        distance.push(INF);
+    }
+
+    distance[source_Cordinate.x][source_Cordinate.y] = 0;
+
+    pq.push({cordinate: source_Cordinate, cost:0});
+    // visited.add(`${source_Cordinate.x}-${source_Cordinate.y}`);
+
+
+    while(!pq.isEmpty()){
+        const {cordinate:current , cost:distanceSoFar} = pq.pop();
+        visitedCell.push(matrix[current.x][current.y]);
+
+        //you find the target
+        if(current.x === target_Cordinate.x && current.y === target_Cordinate.y){
+            getPath(parent , target_Cordinate);
+            return;
+        }  
+        // row x col y  formation here not like x and y cordinate in maths 
+        const neighbours = [
+            {x:current.x-1 , y:current.y },//up
+            {x:current.x, y:current.y + 1 },//right
+            {x:current.x + 1 , y:current.y },//down
+            {x:current.x, y:current.y - 1 },//left
+        ];
+
+        for(const neighbour of neighbours){
+            const key = `${neighbour.x}-${neighbour.y}`;
+            if(
+                isValid(neighbour.x , neighbour.y) 
+                && !matrix[neighbour.x][neighbour.y].classList.contains('wall')
+                // && !visited.has(key)
+            ){
+                //Assuming edge weight = 1 , between adjecent vertices
+                const edgeWeight = 1;
+                const distanceToNeighbour = distanceSoFar + edgeWeight;
+                
+                if(distanceToNeighbour < distance[neighbour.x][neighbour.y]){
+                    distance[neighbour.x][neighbour.y] = distanceToNeighbour;
+                    pq.push({cordinate : neighbour , cost :distanceToNeighbour});
+                    // visited.add(key);
+                    parent.set(key , current);
+                }
+               
+            }
+        }
+    }
+
 }

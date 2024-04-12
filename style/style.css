@@ -107,6 +107,7 @@ nav{
     width: 100%;
     border: 1px solid var(--light-line);
 }
+
 .guide-bar{
     gap: 16px;
     display: flex;
@@ -115,7 +116,7 @@ nav{
     text-transform: capitalize;
 }
 .guide-bar>li{
-    gap: 4px;
+   gap: 4px;
     display: flex;
     align-items: center;
 }

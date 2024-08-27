@@ -44,6 +44,9 @@ function renderBoard(cellWidth = 22){
     }
     source_Cordinate = set('source');
     target_Cordinate = set('target');
+    console.log(source_Cordinate,target_Cordinate);
+
+    attachCellEventListeners();
 }
 // console.log(matrix);
 var dropOptions = null ;
@@ -81,7 +84,7 @@ const removeActive = (elements , parent = false )=>{
 }
 
 let pixelSize = 22;
-let speed = 'normal';
+let speed = 'Normal';
 let algorithm = 'BFS' ;
 const visualizeBtn = document.getElementById("visualize");
 
@@ -92,16 +95,17 @@ const visualizeBtn = document.getElementById("visualize");
 function toggle_dropOption(target){
     // console.log(target)
     dropOptions.forEach(dropOption=>{
+        console.log(dropOption);
         dropOption.addEventListener('click', ()=>{
             removeActive(dropOptions);
             dropOption.classList.add('active')
             if(target === 'pixel'){
                 pixelSize = +dropOption.innerText.replace('px', '');
                 renderBoard(pixelSize)
-                // console.log(pixelSize);
+                console.log(pixelSize);
             }else if (target === 'speed'){
                 speed = dropOption.innerText;
-                // console.log(speed);
+                console.log(speed);
             }else if( target === 'algorithms'){
                 // just taking only first word
                 algoFname =  dropOption.innerText.split(' ')[0];
@@ -113,6 +117,7 @@ function toggle_dropOption(target){
             removeActive(navOptions , true);
         })
     })
+    console.log(algorithm);
 }
 document.addEventListener('click' , (e)=>{
     const navMenu = document.querySelector(".nav-menu")
@@ -164,56 +169,59 @@ let isDrawing = false;
 let isDragging = false;
 let DragPoint = null;
 
-cells.forEach((cell) => {
-    const pointerdown = (e)=> {
-        if(e.target.classList.contains('source')) {
-            DragPoint = 'source'
-            isDragging = true;
-        }else if(e.target.classList.contains('target')){
-            DragPoint = 'target'
-            isDragging = true;
-        }
-        else{
-            isDrawing = true;
-        }
-
-    }
-    const pointermove = (e)=>{
-
-        if(isDrawing){
-            e.target.classList.add('wall');
-        }else if(DragPoint && isDragging){
-            // Sequance matters
-            // 1
-            cells.forEach(cell=>{
-                cell.classList.remove(`${DragPoint}`);
-            });
-            // 2
-            e.target.classList.add(`${DragPoint}`);
-            cordinate = e.target.id.split('-');
-            if(DragPoint ==='source'){
-                source_Cordinate.x = +cordinate[0];
-                source_Cordinate.y = +cordinate[1];
-            }else{
-                target_Cordinate.x = +cordinate[0];
-                target_Cordinate.y = +cordinate[1];
+function attachCellEventListeners() {
+    cells.forEach((cell) => {
+        const pointerdown = (e)=> {
+            if(e.target.classList.contains('source')) {
+                DragPoint = 'source'
+                isDragging = true;
+            }else if(e.target.classList.contains('target')){
+                DragPoint = 'target'
+                isDragging = true;
             }
-            // console.log(source_Cordinate);
-            // console.log(target_Cordinate);
+            else{
+                isDrawing = true;
+            }
+
         }
-    }
-    const pointerup = ()=>{
-        isDrawing = false;
-        isDragging = false;
-        DragPoint = null;
-    }
-    cell.addEventListener('pointerdown', pointerdown);
-    cell.addEventListener('pointermove', pointermove);
-    cell.addEventListener('pointerup', pointerup);
-    cell.addEventListener('click',()=>{
-        cell.classList.toggle('wall');
-    })
-});
+        const pointermove = (e)=>{
+            console.log(e);
+            if(isDrawing){
+                e.target.classList.add('wall');
+            }else if(DragPoint && isDragging){
+                // Sequance matters
+                // 1
+                console.log("Dragin is happening!")
+                cells.forEach(cell=>{
+                    cell.classList.remove(`${DragPoint}`);
+                });
+                // 2
+                e.target.classList.add(`${DragPoint}`);
+                cordinate = e.target.id.split('-');
+                if(DragPoint ==='source'){
+                    source_Cordinate.x = +cordinate[0];
+                    source_Cordinate.y = +cordinate[1];
+                }else{
+                    target_Cordinate.x = +cordinate[0];
+                    target_Cordinate.y = +cordinate[1];
+                }
+                // console.log(source_Cordinate);
+                // console.log(target_Cordinate);
+            }
+        }
+        const pointerup = ()=>{
+            isDrawing = false;
+            isDragging = false;
+            DragPoint = null;
+        }
+        cell.addEventListener('pointerdown', pointerdown);
+        cell.addEventListener('pointermove', pointermove);
+        cell.addEventListener('pointerup', pointerup);
+        cell.addEventListener('click',()=>{
+            cell.classList.toggle('wall');
+        })
+    });
+}
 
 const clearPath = ()=> {
     cells.forEach(cell=>{
@@ -255,6 +263,7 @@ generateMazeBtn.addEventListener('click', ()=>{
 });
 // 
 function generateMaze(rowStart , rowEnd , colStart , colEnd , surroundingWall , orientation){
+    clearBoard();
     if(rowStart > rowEnd || colStart > colEnd){
         return;
     }
@@ -346,16 +355,26 @@ function generateMaze(rowStart , rowEnd , colStart , colEnd , surroundingWall , 
 // Path Finding algos
 var visitedCell ;
 var pathToAnimate ;
-visualizeBtn.addEventListener('click', ()=>{
+var getAlgo = document.querySelector('.targetAlgo').children;
+var activeNode = Array.from(getAlgo).find(child => child.classList.contains('active'));
+console.log(activeNode.textContent);
+visualizeBtn.addEventListener('click',()=>{
+    clearPath();
     visitedCell = [];
     pathToAnimate = [];
-    // BFS();
-    // Dijsktra();
-    // greedy();;
-    // Astar();
-    if(DFS(source_Cordinate))
-        pathToAnimate.push(matrix[source_Cordinate.x][source_Cordinate.y]);
-    // DFS(source_Cordinate);
+    if (algorithm === 'BFS'){
+        BFS();
+    }else if (algorithm === "Dijkstra's"){
+        Dijsktra();
+    }else if (algorithm === 'Greedy'){
+        greedy();
+    }else if (algorithm === 'A*'){
+        Astar();
+    }else{
+        if(DFS(source_Cordinate))
+            pathToAnimate.push(matrix[source_Cordinate.x][source_Cordinate.y]);
+        DFS(source_Cordinate);
+    }
     animate(visitedCell , 'visited');
 });
 function BFS(){
@@ -399,21 +418,35 @@ function BFS(){
     }
 
 }
+const SPEEDS = {
+    Fast: 10,   
+    Normal: 25, 
+    Slow: 50    
+};
 
-function animate(elements , className){
-    let delay = 10 ;
-    if(className === 'path') delay *= 3.5;
-    if(className === 'wall') delay *= 0.005;
-    for(let i  = 0 ; i< elements.length ; i++){
-        setTimeout(()=>{
-            elements[i].classList.remove('visited');
-            elements[i].classList.add(className);
-            if(i === elements.length-1 && className === 'visited' ){
-                // console.log("Search finished")
-                animate(pathToAnimate , 'path')
+function animate(elements, className) {
+    // Determine the base delay for animation
+    let baseDelay = SPEEDS[speed];
+
+    // Adjust the delay based on the className
+    let delayMultiplier = 1;
+    if (className === 'path') delayMultiplier = 3.5;
+    if (className === 'wall') delayMultiplier = 0.005;
+
+    // Calculate the actual delay
+    const delay = baseDelay * delayMultiplier;
+
+    elements.forEach((element, index) => {
+        setTimeout(() => {
+            element.classList.remove('visited');
+            element.classList.add(className);
+
+            // If the last element is animated and the className is 'visited', start animating the path
+            if (index === elements.length - 1 && className === 'visited') {
+                animate(pathToAnimate, 'path');
             }
-        },delay * i);
-    }
+        }, delay * index);
+    });
 }
 
 function getPath(parent , target){

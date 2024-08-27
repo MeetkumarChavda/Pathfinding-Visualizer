@@ -123,6 +123,9 @@ nav{
 #board{
     overflow: hidden;
 }
+.targetAlgo{
+    color: aliceblue;
+}
 
 @media screen and (max-width: 1000px) {
     nav{

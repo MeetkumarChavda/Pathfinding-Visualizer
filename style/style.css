@@ -23,6 +23,176 @@ body{
     width: 100vw;
     height: 100vh;
 }
+
+/* tutotial */
+
+.tutorial{
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    position: fixed;
+    background-color: rgba(0, 0, 0, 0.194);
+    backdrop-filter: blur(1.2px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+.tutorial.active{
+    display: flex;
+}
+.tutorial-toggle{
+    width: 30px;
+    background: url(../assets/icon/flask.svg);
+    border: 1px solid var(--light-line);
+    aspect-ratio: 1;
+    border-radius: 5px;    
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    cursor: pointer;
+    transition: .3s ease-in-out;
+}
+.tutorial-toggle:hover{
+    transform: scale(1.1);
+    box-shadow: rgba(0, 0, 0, 0.253) 0px 20px 25px -5px, rgba(0, 0, 0, 0.267) 0px 10px 10px -5px;
+}
+.card{
+    user-select: none;
+    background-color: white;
+    margin: 8px;
+    width: 100%;
+    max-width: 500px;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: rgba(29, 32, 34, 0.434) 0px 8px 24px;
+}
+
+.card .upper{
+    height: 100%;
+    min-height: 350px;
+    max-width: 500px;
+    width: 100%;
+    position: relative;
+}
+.card .bottom{
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid var(--light-line);
+    padding: 8px;
+    gap: 16px;
+}
+.card .bottom .right{
+    display: flex;
+    gap: 2px;
+}
+.card .bottom .right .btn:first-child{
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+.card .bottom .right .btn:last-child{
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+.card .bottom .btn{
+    font-weight: 500;
+    text-transform: capitalize;
+    font-size: 13px;
+}
+.blue{
+    color: var(--primary-clr);
+}
+.slide:nth-child(1){
+    background: url(../assets/tutorial/man-thinking.svg);
+}
+.slide:nth-child(2){
+    background: url(../assets/tutorial/man-with-maze.svg);
+}
+.default-bg{
+    background: url(../assets/tutorial/bg-2.svg);
+}
+.slide:last-child{
+    background: url(../assets/tutorial/man-clicking-visualize.svg);
+    background-size: 60% 60% !important;
+}
+.upper .slide{
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-repeat: no-repeat;
+    background-size: 80% 80%;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 20px;
+    text-align: center;
+    transition: .5s ease;
+}
+.slide .img-box{
+    height: 170px;
+    width: 170px;
+    overflow: hidden;
+    transition: .3s;
+}
+.img-box.shadow{
+    box-shadow: rgba(0, 0, 0, 0.27) 0px 3px 8px;
+}
+
+.img-box.shadow:hover{
+    transform: scale(1.15);
+    box-shadow: rgba(29, 32, 34, 0.434) 0px 8px 24px;
+}
+
+.slide .img-box img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.slide h4{
+    text-transform: capitalize;
+    margin-bottom: 20px;
+}
+.slide p{
+    position: absolute;
+    bottom: 0;
+    margin: 0 30px;
+    font-size: 14px;
+    color: var(--light-text);
+    background-color: white;
+}
+.dots{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 0;
+}
+
+@keyframes shake{
+    0% { transform: scale(1);}
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+.dots .dot{
+    height: 8px;
+    width: 8px;
+    border-radius: 10px;
+    background-color: var(--light-dot);
+    cursor: pointer;
+}
+.dots .dot.active{
+    transition: width 0.1s linear;
+    width: 16px;
+    height: 8px;
+    background-color: var(--primary-clr);
+}
+
+
+/* tutorial end */
+
 .template{
     width: 100%;
     height: 100%;

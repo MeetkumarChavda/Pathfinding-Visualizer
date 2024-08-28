@@ -8,6 +8,130 @@
     <link rel="stylesheet" href="./style/utility.css">
 </head>
 <body>
+
+    <!-- tutotial section -->
+    <div class="tutorial" id="tutorial">
+        <div class="card">
+            <div class="upper">
+                <!-- -------- what slide -->
+                <div class="slide">
+                    <h4>what is path finder visualizer</h4>
+                    <div class="img-box"></div>
+                    <p>It helps you see how path finding <span class="blue">algorithms</span> find the most efficient
+                        <span class="blue">route</span> between source to target on a grid. </p>
+                </div>
+
+                <!-- -------- how slide -->
+                <div class="slide">
+                    <h4>How does it work</h4>
+                    <div class="img-box"></div>
+                    <p>
+                        You can set start and end points, create mazes, choose algorithms, and watch the process in
+                        action. 
+                        It's a fun and visual way to understand how different strategies navigate through obstacles to
+                        find the <span class="blue">shortest path</span>.
+                    </p>
+                </div>
+
+                <!-- -------- source/target slide -->
+                <div class="slide default-bg">
+                    <h4>Adjust source/target</h4>
+                    <div class="img-box shadow">
+                        <img src="assets/tutorial/drag-source-target.gif" alt="">
+                    </div>
+                    <p>
+                        Click and drag the <span class="blue">source/target</span> marker to where you want it on the grid.
+                    </p>
+                </div>
+
+                <!-- -------- draw wall slide -->
+                <div class="slide default-bg">
+                    <h4>Draw walls/obstacles</h4>
+                    <div class="img-box shadow">
+                        <img src="assets/tutorial/draw-wall.gif" alt="">
+                    </div>
+                    <p>
+                        Use the 'Draw Wall' option to mark obstacles on the grid. <br> Simply <span class="blue">click</span> and <span class="blue">drag</span> to create walls and define the layout.
+                    </p>
+                </div>
+
+                <!-- -------- mase genration slide -->
+                <div class="slide default-bg">
+                    <h4>generate maze</h4>
+                    <div class="img-box shadow">
+                        <img src="assets/tutorial/generate-maze.gif" alt="">
+                    </div>
+                    <p>
+                        It's time to give your pathfinding algorithm a <span class="blue">brainstorm!</span> <br>
+                        Just click <span class="blue">Generate Maze</span> and watch the algorithm's creativity.
+                    </p>
+                </div>
+
+                <!------ pixel size change slide -->
+                <div class="slide default-bg">
+                    <h4>Select Pixel Size</h4>
+                    <div class="img-box shadow">
+                        <img src="assets/tutorial/pixel_tutorial.png" alt="">
+                    </div>
+                    <p>
+                        It allow you to increase or decrease the cells in the grid<br>
+                        helps you to get wider range in small devices, like <span class="blue">mobile phone</span>
+                    </p>
+                </div>
+
+                <!-------- speed slide -->
+                <div class="slide default-bg">
+                    <h4>Adjust the speed</h4>
+                    <div class="img-box shadow">
+                        <img src="assets/tutorial/speed_tutorial.png" alt="">
+                    </div>
+                    <p>
+                        Adjust the <span class="blue">speed</span> of the searching to follow the algorithm's progress
+                        closely.
+                    </p>
+                </div>
+
+                <!----algo slide -->
+                <div class="slide default-bg">
+                    <h4>Select Algorithm</h4>
+                    <div class="img-box shadow">
+                        <img src="assets/tutorial/algorithm_tutorial.png" alt="">
+                    </div>
+                    <p>
+                        Pick one... from various <span class="blue">pathfinding algorithms.</span> Each has its unique way
+                        of finding the shortest path.
+                    </p>
+                </div>
+
+                <!------finish-->
+                <div class="slide">
+                    <h4>click on visualize btn</h4>
+                    <div class="img-box"></div>
+                    <p>
+                        click the <span class="blue">visualize</span> btn and boom !<br>
+                        enjoy the process
+                    </p>
+                </div>
+
+
+            </div>
+
+            <div class="dots">
+
+            </div>
+            <div class="bottom">
+                <div class="left">
+                    <div class="btn" id="skip">skip tutorial</div>
+                </div>
+                <div class="right">
+                    <div id="prev" class="btn unactive">previous</div>
+                    <div id="next" class="btn">next</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
    <div class="template">
         <header>
             <nav>
@@ -71,7 +195,7 @@
                 </li>
                 <li>
                     <span class="icon path"></span>
-                    <span class="text">path</span>
+                    <span class="text">Shortest-Path Node</span>
                 </li>
                 <li>
                     <span class="icon visited"></span>
@@ -85,6 +209,7 @@
                     <span class="icon wall"></span>
                     <span class="text">Wall</span>
                 </li>
+                <div class="tutorial-toggle"></div>
             </ul>
         </header>
         <!-- ============ DYNAMIC BOARD ================ -->
